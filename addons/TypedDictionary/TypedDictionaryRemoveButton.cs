@@ -20,7 +20,8 @@ public partial class TypedDictionaryRemoveButton : TypedDictionaryKVP
         OnRemoveDictionaryKVP += onRemoveKVP;
         KVP = kvp;
         SetAnchorsPreset(LayoutPreset.FullRect);
-        SizeFlagsHorizontal = SizeFlags.ExpandFill;
+        SizeFlagsVertical = SizeFlags.ShrinkCenter;
+        SizeFlagsHorizontal = SizeFlags.ShrinkCenter;
         CreateButton().Pressed += () =>
         {
             OnRemoveDictionaryKVP?.Invoke(KVP);
@@ -33,7 +34,8 @@ public partial class TypedDictionaryRemoveButton : TypedDictionaryKVP
         OnRemoveArrayValue += onRemoveArrayValue;
         ArrayValue = arrayValue;
         SetAnchorsPreset(LayoutPreset.FullRect);
-        SizeFlagsHorizontal = SizeFlags.ExpandFill;
+        SizeFlagsVertical = SizeFlags.ShrinkCenter;
+        SizeFlagsHorizontal = SizeFlags.ShrinkCenter;
         CreateButton().Pressed += () =>
         {
             OnRemoveArrayValue?.Invoke(ArrayValue);
@@ -47,10 +49,6 @@ public partial class TypedDictionaryRemoveButton : TypedDictionaryKVP
         RemoveButton.ExpandIcon = true;
         RemoveButton.Text = " ";
         RemoveButton.SetAnchorsPreset(LayoutPreset.FullRect);
-        RemoveButton.Pressed += () =>
-        {
-            OnRemoveDictionaryKVP?.Invoke(KVP);
-        };
         TextureRect icon = new();
         icon.SetAnchorsPreset(LayoutPreset.FullRect);
         icon.Texture = EditorInterface.Singleton.GetEditorTheme().GetIcon("Remove", "EditorIcons");

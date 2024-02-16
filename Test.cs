@@ -3,12 +3,14 @@ using System;
 using Godot.Collections;
 /// <summary>
 /// Example of using TypedDictionary
-/// The dictionary should derive from <see cref="Godot.Collections.Dictionary{TKey, TValue}"/> instead of <see cref="System.Collections.Generic.Dictionary{TKey, TValue}"/>
-/// You need to add <see cref="ToolAttribute"/>, otherwise the plugin won't be able to find them
+/// <para>The dictionary should derive from <see cref="Godot.Collections.Dictionary{TKey, TValue}"/> instead of <see cref="System.Collections.Generic.Dictionary{TKey, TValue}"/></para>
+/// <para>You need to add <see cref="ToolAttribute"/>, otherwise the plugin won't be able to find them</para>
 /// This is Godot Engine limitation
+/// 
+/// <para>If you want to check whether you are on editor or in game. Use <see cref="Engine.IsEditorHint"/></para>
 /// </summary>
 [Tool]
-public partial class Test : Godot.Node2D
+public partial class Test : Node2D
 {
     [Export] public Dictionary<string, TypeCode> TypeCodes = null;
     [Export] public Dictionary<Vector3, TestResources> TestResourcesDict = null;
@@ -16,7 +18,7 @@ public partial class Test : Godot.Node2D
     [Export] public Dictionary<int, Dictionary<string, AudioStream>> AudioStreamDict = null;
     [Export] public Dictionary<bool, Variant.Type> VariantTypesDict = null;
     [Export] public Array<string> Yes;
-    // Called when the node enters the scene tree for the first time.
+
     public void PrintAllDictionary()
     {
         PrintDictionary(TypeCodes, nameof(TypeCodes));

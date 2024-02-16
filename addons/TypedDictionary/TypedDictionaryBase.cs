@@ -49,11 +49,11 @@ public partial class TypedDictionaryBase : TypedDictionaryKVP
             SizeFlagsVertical = SizeFlags.ExpandFill
         };
 
-        if (CanCastToStruct())
+        if (CanCastToTensor())
         {
             if (defaultValue.Equals(default))
             {
-                CreateDefaultStructValue();
+                CreateDefaultTensorValue();
             }
             Content = CreateTensorProperty(VariantType);
             Content.SizeFlagsHorizontal = SizeFlags.ExpandFill;
@@ -143,7 +143,9 @@ public partial class TypedDictionaryBase : TypedDictionaryKVP
                             spinBox.SetValueNoSignal(newValue);
                         }
                     };
-                    spinBox.Value = m_Value.AsDouble();
+                    //Not needed because SetSpinBoxMinMax already set the value
+                    //spinBox.Value = m_Value.AsDouble();
+                    
                     Content = spinBox;
                     break;
 
@@ -608,7 +610,7 @@ public partial class TypedDictionaryBase : TypedDictionaryKVP
 
     //Wtf is this
     //TODO: Should change to cavemen route for compability
-    public bool CanCastToStruct()
+    public bool CanCastToTensor()
     {
         return VariantType switch
         {
@@ -616,7 +618,7 @@ public partial class TypedDictionaryBase : TypedDictionaryKVP
             _ => false,
         };
     }
-    public void CreateDefaultStructValue()
+    public void CreateDefaultTensorValue()
     {
         switch (VariantType)
         {
@@ -871,7 +873,7 @@ public partial class TypedDictionaryBase : TypedDictionaryKVP
         if (VariantType == Variant.Type.Array)
             return m_Value.AsGodotArray();
 
-        if (CanCastToStruct())
+        if (CanCastToTensor())
             return m_Value;
 
         GD.PrintErr($"Unknown value type {VariantType}");
@@ -891,7 +893,7 @@ public partial class TypedDictionaryBase : TypedDictionaryKVP
             colorPicker.Color = new Color(1, 1, 1, 1);
         if (Content is EditorResourcePicker editorResourcePicker)
             editorResourcePicker.EditedResource = null;
-        if (CanCastToStruct())
-            CreateDefaultStructValue();
+        if (CanCastToTensor())
+            CreateDefaultTensorValue();
     }
 }

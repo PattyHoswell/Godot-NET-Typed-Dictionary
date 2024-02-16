@@ -80,13 +80,18 @@ public partial class TypedDictionaryDropdown : EditorProperty
             value.OriginalKey = key;
 
             Contents.Add(value, item);
-            m_ContentGrid.AddChild(new TypedDictionaryRemoveButton().SetDictionaryData(item, (KeyValuePair<Variant, Variant> removedItem) =>
+
+            TypedDictionaryRemoveButton removeButton = new TypedDictionaryRemoveButton().SetDictionaryData(item, (KeyValuePair<Variant, Variant> removedItem) =>
             {
                 if (PropertyData.dict.Remove(removedItem.Key))
                 {
                     EmitChanged(PropertyData.propertyName, PropertyData.parentDictionary ?? PropertyData.dict);
                 }
-            }));
+            });
+            removeButton.SizeFlagsHorizontal = SizeFlags.ShrinkBegin;
+            removeButton.SizeFlagsVertical = SizeFlags.ShrinkBegin;
+
+            m_ContentGrid.AddChild(removeButton);
             m_ContentGrid.AddChild(key);
             m_ContentGrid.AddChild(value);
         }
@@ -163,9 +168,9 @@ public partial class TypedDictionaryDropdown : EditorProperty
             m_Key.RefreshValue(newValue);
             return true;
         };
-        if (m_Key.CanCastToStruct())
+        if (m_Key.CanCastToTensor())
         {
-            m_Key.CreateDefaultStructValue();
+            m_Key.CreateDefaultTensorValue();
         }
 
         m_Value = new TypedDictionaryBase().SetData(PropertyData.editingObject, PropertyData.valueType, PropertyData.propertyName);
@@ -175,14 +180,15 @@ public partial class TypedDictionaryDropdown : EditorProperty
             m_Value.RefreshValue(newValue);
             return true;
         };
-        if (m_Value.CanCastToStruct())
+        if (m_Value.CanCastToTensor())
         {
-            m_Value.CreateDefaultStructValue();
+            m_Value.CreateDefaultTensorValue();
         }
 
         m_Key.DropdownParent = this;
         m_Value.DropdownParent = this;
 
+        //Disable adding item from add element/key value pairs to avoid unexpected behaviour
         if (GD.TypeToVariantType(PropertyData.keyType) == Variant.Type.Dictionary && m_Value.Content is TypedDictionaryDropdown dropdown)
         {
             dropdown.SelfButton.Disabled = true;
@@ -190,6 +196,14 @@ public partial class TypedDictionaryDropdown : EditorProperty
         if (GD.TypeToVariantType(PropertyData.valueType) == Variant.Type.Dictionary && m_Value.Content is TypedDictionaryDropdown dropdown2)
         {
             dropdown2.SelfButton.Disabled = true;
+        }
+        if (GD.TypeToVariantType(PropertyData.keyType) == Variant.Type.Array && m_Value.Content is TypedDictionaryArray array)
+        {
+            array.SelfButton.Disabled = true;
+        }
+        if (GD.TypeToVariantType(PropertyData.valueType) == Variant.Type.Array && m_Value.Content is TypedDictionaryArray array2)
+        {
+            array2.SelfButton.Disabled = true;
         }
 
         vBoxContainer.AddChild(m_Key);

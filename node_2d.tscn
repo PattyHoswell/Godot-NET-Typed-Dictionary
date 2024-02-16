@@ -7,7 +7,6 @@ font_size = 50
 
 [node name="Node2D" type="Node2D"]
 script = ExtResource("1_lgceg")
-OriginalGodotDictionary = {}
 TypeCodes = {}
 TestResourcesDict = {}
 PackedScenesDict = {}

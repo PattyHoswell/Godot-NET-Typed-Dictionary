@@ -18,13 +18,13 @@ public partial class TypedDictionaryArrayButtonMover : Button
     public override void _Ready()
     {
         base._Ready();
-        CustomMinimumSize = new Vector2(30, 30);
-        TooltipText = "I know this is wrong icon but i dont know what is the icon name used for moving index";
+        SizeFlagsHorizontal = SizeFlags.ShrinkCenter;
+        SizeFlagsVertical = SizeFlags.ShrinkCenter;
+        CustomMinimumSize = new Vector2(20, 20);
+        TooltipText = "Move Item Index";
         TextureRect texture = new();
         texture.SetAnchorsPreset(LayoutPreset.FullRect);
-
-        //I don't know is the icon name used for moving item in array
-        texture.Texture = EditorInterface.Singleton.GetEditorTheme().GetIcon("AnimationTrackList", "EditorIcons");
+        texture.Texture = EditorInterface.Singleton.GetEditorTheme().GetIcon("TripleBar", "EditorIcons");
         Text = " ";
         MouseEntered += () =>
         {
@@ -35,7 +35,7 @@ public partial class TypedDictionaryArrayButtonMover : Button
     }
     public override bool _CanDropData(Vector2 atPosition, Variant data)
     {
-        if (data.ToString().StartsWith("TypedDictionaryArray") && data.ToString() != CurrentData.ToString())
+        if (data.ToString().StartsWith("TypedDictionaryArray") && data.ToString() != DragData.ToString())
         {
             string[] split = data.ToString().Split('_');
             if (split[1] == TargetPropertyName)

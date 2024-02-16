@@ -14,6 +14,7 @@ public partial class TypedDictionaryArray : TypedDictionaryKVP
     public Godot.Collections.Array ItemArray;
     public Godot.Collections.Array<TypedDictionaryArrayButtonMover> ButtonMover;
     public Dictionary AttachedDictionary;
+    public Button SelfButton;
 
     private VBoxContainer m_Dropdown, m_ContentDropdown;
     private Variant m_Item;
@@ -40,7 +41,7 @@ public partial class TypedDictionaryArray : TypedDictionaryKVP
         ItemArray = array.AsGodotArray();
         ButtonMover = new();
 
-        Button enableButton = new()
+        SelfButton = new()
         {
             Text = $"Array[{expectedType.Name}] (size {ItemArray.Count})",
             Disabled = !enabled
@@ -59,8 +60,8 @@ public partial class TypedDictionaryArray : TypedDictionaryKVP
             CreateNewItem(editingObject, propertyName, expectedType, m_ContentDropdown, item, m_ContentDropdown.GetChildCount());
         }
 
-        enableButton.Pressed += () => m_Dropdown.Visible = !m_Dropdown.Visible;
-        AddChild(enableButton);
+        SelfButton.Pressed += () => m_Dropdown.Visible = !m_Dropdown.Visible;
+        AddChild(SelfButton);
         m_Dropdown.AddChild(CreateAddElementButton());
         AddChild(m_Dropdown);
         SetBottomEditor(m_Dropdown);
