@@ -11,7 +11,7 @@ public partial class TypedDictionaryBase : TypedDictionaryKVP
     public Variant.Type VariantType;
     public Func<Variant, Variant, bool> OnValueChanged;
 
-    //This is added so that when the key changes, m_DictItem will also changes with it.
+    //This is added so that when the key changes, it will refresh the dictionary key and value.
     public TypedDictionaryBase OriginalKey;
     public TypedDictionaryDropdown DropdownParent;
     public Godot.Collections.Dictionary AttachedDictionary;
@@ -320,6 +320,7 @@ public partial class TypedDictionaryBase : TypedDictionaryKVP
 
         else if (numberType == typeof(ulong))
         {
+            //UInt64
             spinBox.MaxValue = int.MaxValue;
             spinBox.MinValue = int.MinValue;
             if (setValue)
@@ -350,6 +351,7 @@ public partial class TypedDictionaryBase : TypedDictionaryKVP
 
     private bool UpdateValue(Variant newValue, Variant actualOldValue)
     {
+        //This is used to refresh the value, but doesn't actually change the contents inside the dictionary
         if (OnValueChanged != null)
         {
             return OnValueChanged(newValue, actualOldValue);
@@ -614,7 +616,19 @@ public partial class TypedDictionaryBase : TypedDictionaryKVP
     {
         return VariantType switch
         {
-            Variant.Type.Vector2 or Variant.Type.Vector2I or Variant.Type.Vector3 or Variant.Type.Vector3I or Variant.Type.Vector4 or Variant.Type.Vector4I or Variant.Type.Rect2 or Variant.Type.Rect2I or Variant.Type.Projection or Variant.Type.Aabb or Variant.Type.Basis or Variant.Type.Plane or Variant.Type.Quaternion => true,
+            Variant.Type.Vector2 
+            or Variant.Type.Vector2I
+            or Variant.Type.Vector3
+            or Variant.Type.Vector3I
+            or Variant.Type.Vector4
+            or Variant.Type.Vector4I
+            or Variant.Type.Rect2
+            or Variant.Type.Rect2I
+            or Variant.Type.Projection
+            or Variant.Type.Aabb
+            or Variant.Type.Basis
+            or Variant.Type.Plane
+            or Variant.Type.Quaternion => true,
             _ => false,
         };
     }
@@ -716,11 +730,13 @@ public partial class TypedDictionaryBase : TypedDictionaryKVP
                     case "Position":
                         Vector2 rect2Position = rect2.Position;
                         rect2Position[index] = (float)value;
+                        rect2.Position = rect2Position;
                         break;
 
                     case "Size":
                         Vector2 rect2Size = rect2.Size;
                         rect2Size[index] = (float)value;
+                        rect2.Size = rect2Size;
                         break;
                 }
                 result = rect2;
@@ -733,11 +749,13 @@ public partial class TypedDictionaryBase : TypedDictionaryKVP
                     case "Position":
                         Vector2I rect2Position = rect2i.Position;
                         rect2Position[index] = (int)value;
+                        rect2i.Position = rect2Position;
                         break;
 
                     case "Size":
                         Vector2I rect2Size = rect2i.Size;
                         rect2Size[index] = (int)value;
+                        rect2i.Size = rect2Size;
                         break;
                 }
                 result = rect2i;
@@ -750,21 +768,25 @@ public partial class TypedDictionaryBase : TypedDictionaryKVP
                     case "X":
                         Vector4 projectionX = projection.X;
                         projectionX[index] = (float)value;
+                        projection.X = projectionX;
                         break;
 
                     case "Y":
                         Vector4 projectionY = projection.Y;
                         projectionY[index] = (float)value;
+                        projection.Y = projectionY;
                         break;
 
                     case "Z":
                         Vector4 projectionZ = projection.Z;
                         projectionZ[index] = (float)value;
+                        projection.Z = projectionZ;
                         break;
 
                     case "W":
                         Vector4 projectionW = projection.W;
                         projectionW[index] = (float)value;
+                        projection.W = projectionW;
                         break;
                 }
                 result = projection;
@@ -777,11 +799,13 @@ public partial class TypedDictionaryBase : TypedDictionaryKVP
                     case "Position":
                         Vector3 aabbPosition = aabb.Position;
                         aabbPosition[index] = (float)value;
+                        aabb.Position = aabbPosition;
                         break;
 
                     case "Size":
                         Vector3 aabbSize = aabb.Position;
                         aabbSize[index] = (float)value;
+                        aabb.Size = aabbSize;
                         break;
                 }
                 result = aabb;
@@ -794,16 +818,19 @@ public partial class TypedDictionaryBase : TypedDictionaryKVP
                     case "X":
                         Vector3 basisX = basis.X;
                         basisX[index] = (float)value;
+                        basis.X = basisX;
                         break;
 
                     case "Y":
                         Vector3 basisY = basis.Y;
                         basisY[index] = (float)value;
+                        basis.Y = basisY;
                         break;
 
                     case "Z":
                         Vector3 basisZ = basis.Z;
                         basisZ[index] = (float)value;
+                        basis.Z = basisZ;
                         break;
                 }
                 result = basis;
@@ -876,8 +903,9 @@ public partial class TypedDictionaryBase : TypedDictionaryKVP
         if (CanCastToTensor())
             return m_Value;
 
+        //It should not reach this but in case it did we gonna return the m_Value anyways instead of the default Variant
         GD.PrintErr($"Unknown value type {VariantType}");
-        return default;
+        return m_Value;
     }
 
     //This is currently unused, it supposed to trigger when the user press Clear button, but i dont know how to add Clear button right now
